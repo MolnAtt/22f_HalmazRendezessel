@@ -35,9 +35,11 @@ namespace _22f_HalmazRendezessel
 			/// <returns></returns>
 
 			public override string ToString() => "[ " + string.Join(" ", t) + " ]";
-			
+
 			private int Helye(int elem)
 			{
+				if (t.Count == 0)
+					return 0;
 				int e = 0;
 				int v = t.Count - 1;
 				int k;
@@ -45,14 +47,12 @@ namespace _22f_HalmazRendezessel
 				{
 					k = (e + v) / 2;
 
-					if (t[k] == elem)
-						return k;
-					if (t[k] < elem)
-						e = k + 1;
-					else
+					if (elem < t[k])
 						v = k - 1;
-				} while (e<=v);
-				return e;
+					else if (t[k] < elem)
+						e = k + 1;
+				} while (e <= v && t[k] != elem);
+				return t[k] == elem ? k : e;
 			}
 
 			/// <summary>
@@ -89,12 +89,17 @@ namespace _22f_HalmazRendezessel
 
 			public void Add(int elem)
 			{
-				int h = Helye(elem);
-				if (t[h] != elem)
-					t.Insert(h, elem);
+                Console.Error.WriteLine($"Hozzá fogom adni az {elem} elemet");
+				int h = Helye(elem); // ha benne van, az indexét, ha nincs benne, a leendő indexét adja meg!
+				Console.Error.WriteLine($"Hozzá fogom adni az {elem} elemet a {h} helyre");
 
-				// ha a végére kerülne egy szám, oda nem instertelni kell, hanem Add-olni!
-			}
+				if (t.Count==h) // a leendő helye a lista végén van!
+				{
+					t.Add(elem);
+				}
+				else if (t[h] != elem)
+					t.Insert(h, elem);
+            }
 
 			public void Remove(int elem)
 			{
